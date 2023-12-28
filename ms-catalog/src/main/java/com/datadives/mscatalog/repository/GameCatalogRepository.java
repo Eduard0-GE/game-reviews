@@ -11,4 +11,6 @@ public interface GameCatalogRepository extends MongoRepository<GameCatalogEntity
     GameCatalogEntity findByName(String name);
 
     List<GameCatalogEntity> findAll();
+
+    List<GameCatalogEntity>findAllByGenres(String genre);
 }
