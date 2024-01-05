@@ -23,7 +23,7 @@ public class AnaliseRepositoryTest {
     @Test
     public void findAll(){
         Usuario usuario = new Usuario(1, "email@gerson.io", "gersonSenhaForte", "84748671598");
-        Analise analise = new Analise(1 ,usuario, "658dba32787787532e4f7ff1", "BloodBorne é o melhor soulslike lançado pela FromSoftware", 5);
+        Analise analise = new Analise(1 ,usuario, "658dba32787787532e4f7ff1", "BloodBorne é o melhor soulslike lançado pela FromSoftware", (short) 5);
 
         List<Analise> lista = Arrays.asList(analise);
 
