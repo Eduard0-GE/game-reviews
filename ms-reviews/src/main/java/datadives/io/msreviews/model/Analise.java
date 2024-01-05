@@ -2,6 +2,7 @@ package datadives.io.msreviews.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.type.descriptor.jdbc.SmallIntJdbcType;
 
 @Entity
 @Table(name = "analises")
@@ -16,12 +17,12 @@ public class Analise {
     @Column(name = "analise_id")
     private int analiseId;
     @ManyToOne
-    @Column(name = "usuario_id")
+    @JoinColumn(name = "usuario_id")
     private Usuario usuarioId;
     @Column(nullable = false)
     private String jogo;
     @Column(nullable = false)
     private String analise;
     @Column(nullable = false)
-    private int nota;
+    private short nota;
 }
