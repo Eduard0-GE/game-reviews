@@ -1,15 +1,15 @@
 package datadives.io.msreviews.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "usuarios")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
+@EqualsAndHashCode
 public class Usuario {
     @Id()
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,4 +20,6 @@ public class Usuario {
     @Column(nullable = false)
     private String senha;
     private String telefone;
+
+
 }
