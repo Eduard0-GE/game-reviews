@@ -7,6 +7,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 
@@ -23,12 +24,22 @@ class UsuarioServiceTest {
     @Test
     void findByEmail_user_exists() {
         Usuario user = new Usuario(1, "email@gerson.com", "senhaForte", "telefone");
-        when(repository.findByEmail("valid_email")).thenReturn(Optional.of(user));
+        when(repository.findByEmail("email@gerson.com")).thenReturn(Optional.of(user));
 
-        Usuario body = service.findByEmail("valid_email");
+        Usuario body = service.findByEmail("email@gerson.com");
 
-        verify(repository, atLeast(1)).findByEmail("valid_email");
+        verify(repository, atLeast(1)).findByEmail("email@gerson.com");
         assertEquals(user.getEmail(), body.getEmail());
+    }
+
+    @Test
+    void findByEmail_user_does_not_exists() {
+        Usuario user = new Usuario(1, "email@gerson.com", "senhaForte", "telefone");
+        when(repository.findByEmail("invalid_email")).thenReturn(Optional.empty());
+
+        assertThrows(ResponseStatusException.class, () -> service.findByEmail("invalid_email"));
+
+        verify(repository, atLeast(1)).findByEmail("invalid_email");
     }
 
     @Test
