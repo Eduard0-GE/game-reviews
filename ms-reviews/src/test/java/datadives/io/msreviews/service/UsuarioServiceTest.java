@@ -1,5 +1,6 @@
 package datadives.io.msreviews.service;
 
+import datadives.io.msreviews.dto.UsuarioDto;
 import datadives.io.msreviews.model.Usuario;
 import datadives.io.msreviews.repository.UsuarioRepository;
 import org.junit.jupiter.api.Test;
@@ -9,6 +10,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -44,6 +47,17 @@ class UsuarioServiceTest {
 
     @Test
     void findAll() {
+        Usuario user1 = new Usuario(1, "email@gerson.com", "senhaForte", "telefoneG");
+        Usuario user2 = new Usuario(2, "email@mario.com", "senhaFraca", "telefoneM");
+        List<Usuario> usuarioList = Arrays.asList(user1, user2);
+
+        when(repository.findAll()).thenReturn(usuarioList);
+
+        List<String> emailList = service.findAll();
+
+        verify(repository, atLeast(1)).findAll();
+        assertEquals(usuarioList.get(0).getEmail(), emailList.get(0));
+        assertEquals(usuarioList.get(1).getEmail(), emailList.get(1));
     }
 
     @Test
