@@ -75,7 +75,7 @@ class UsuarioServiceTest {
         Usuario user = new Usuario(1, "email@gerson.com", "senhaForte", "telefone");
         doThrow(DataIntegrityViolationException.class).when(repository).save(user);
 
-        assertThrows(DataIntegrityViolationException.class, () -> service.create(user));
+        assertThrows(ResponseStatusException.class, () -> service.create(user));
         verify(repository, atLeast(1)).save(user);
     }
 }
