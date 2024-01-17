@@ -3,11 +3,13 @@ package datadives.io.msreviews.service;
 import datadives.io.msreviews.dto.UsuarioDto;
 import datadives.io.msreviews.model.Usuario;
 import datadives.io.msreviews.repository.UsuarioRepository;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Arrays;
@@ -61,7 +63,19 @@ class UsuarioServiceTest {
     }
 
     @Test
-    void save(){
+    void create_valid_user(){
+        Usuario user = new Usuario(1, "email@gerson.com", "senhaForte", "telefone");
+        when(repository.save(user)).thenReturn(user);
 
+        assertDoesNotThrow(() -> service.create(user));
+        verify(repository, atLeast(1)).save(user);
+    }
+    @Test
+    void create_invalid_user(){
+        Usuario user = new Usuario(1, "email@gerson.com", "senhaForte", "telefone");
+        doThrow(DataIntegrityViolationException.class).when(repository).save(user);
+
+        assertThrows(DataIntegrityViolationException.class, () -> service.create(user));
+        verify(repository, atLeast(1)).save(user);
     }
 }
