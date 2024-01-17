@@ -1,6 +1,7 @@
 package datadives.io.msreviews.service;
 
 import datadives.io.msreviews.dto.UsuarioDto;
+import datadives.io.msreviews.mapper.UsuarioMapper;
 import datadives.io.msreviews.model.Usuario;
 import datadives.io.msreviews.repository.UsuarioRepository;
 import org.junit.jupiter.api.Disabled;
@@ -23,6 +24,8 @@ import static org.mockito.Mockito.*;
 class UsuarioServiceTest {
     @Mock
     private UsuarioRepository repository;
+    @Mock
+    private UsuarioMapper mapper;
     @InjectMocks
     private UsuarioService service;
 
@@ -76,6 +79,30 @@ class UsuarioServiceTest {
         doThrow(DataIntegrityViolationException.class).when(repository).save(user);
 
         assertThrows(ResponseStatusException.class, () -> service.create(user));
+        verify(repository, atLeast(1)).save(user);
+    }
+
+    @Test
+    void update_user_that_dont_exists(){
+        Usuario user = new Usuario(99, "email@gerson.com", "senhaForte", "telefone");
+        when(repository.findById(99)).thenReturn(Optional.empty());
+
+        assertThrows(ResponseStatusException.class, () -> service.update(user));
+
+        verify(repository, atLeast(1)).findById(user.getUsuarioId());
+        verify(repository, never()).save(user);
+    }
+
+    @Test
+    void update_user_that_exists(){
+        Usuario user = new Usuario(1, "email@gerson.com", "senhaForte", "telefone");
+        when(repository.findById(1)).thenReturn(Optional.of(user));
+        when(mapper.updateUsuarioFromUsuario(user, user)).thenReturn(user);
+        when(repository.save(user)).thenReturn(user);
+
+        assertDoesNotThrow(() -> service.update(user));
+
+        verify(repository, atLeast(1)).findById(user.getUsuarioId());
         verify(repository, atLeast(1)).save(user);
     }
 }
