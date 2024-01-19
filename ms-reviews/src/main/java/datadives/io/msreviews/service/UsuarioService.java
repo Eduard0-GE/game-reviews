@@ -5,6 +5,7 @@ import datadives.io.msreviews.model.Usuario;
 import datadives.io.msreviews.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -45,5 +46,13 @@ public class UsuarioService {
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario não encontrado")
         );
         repository.save(mapper.updateUsuarioFromUsuario(user, usuario));
+    }
+
+    public void deleteByEmail(String email){
+        try {
+            repository.deleteByEmail(email);
+        }catch (EmptyResultDataAccessException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario não encontrado");
+        }
     }
 }
