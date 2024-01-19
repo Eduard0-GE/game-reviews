@@ -11,6 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Arrays;
@@ -104,5 +105,23 @@ class UsuarioServiceTest {
 
         verify(repository, atLeast(1)).findById(user.getUsuarioId());
         verify(repository, atLeast(1)).save(user);
+    }
+
+    @Test
+    void deleteByEmail_user_exists(){
+        Usuario user = new Usuario(1, "email@valid.com", "senhaForte", "telefone");
+        when(repository.deleteByEmail("email@valid.com")).thenReturn(user);
+
+        assertDoesNotThrow(() -> service.deleteByEmail("email@valid.com"));
+        verify(repository, atLeast(1)).deleteByEmail("email@valid.com");
+    }
+
+    @Test
+    void deleteByEmail_user_does_not_exist(){
+        Usuario user = new Usuario(1, "email@invalid.com", "senhaForte", "telefone");
+        doThrow(EmptyResultDataAccessException.class).when(repository).deleteByEmail("email@invalid.com");
+
+        assertThrows(ResponseStatusException.class, () -> service.deleteByEmail("email@invalid.com"));
+        verify(repository, atLeast(1)).deleteByEmail("email@invalid.com");
     }
 }
