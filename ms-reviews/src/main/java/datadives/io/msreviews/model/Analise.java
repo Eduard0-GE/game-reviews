@@ -1,5 +1,6 @@
 package datadives.io.msreviews.model;
 
+import datadives.io.msreviews.dto.AnaliseDto;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.type.descriptor.jdbc.SmallIntJdbcType;
@@ -25,4 +26,11 @@ public class Analise {
     private String analise;
     @Column(nullable = false)
     private short nota;
+
+    public Analise(Usuario user, AnaliseDto dto){
+        this.usuarioId = user;
+        this.jogo = dto.getJogo();
+        this.analise = dto.getAnalise();
+        this.nota = dto.getNota();
+    }
 }
