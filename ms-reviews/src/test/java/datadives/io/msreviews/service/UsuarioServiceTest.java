@@ -1,10 +1,8 @@
 package datadives.io.msreviews.service;
 
-import datadives.io.msreviews.dto.UsuarioDto;
 import datadives.io.msreviews.mapper.UsuarioMapper;
 import datadives.io.msreviews.model.Usuario;
 import datadives.io.msreviews.repository.UsuarioRepository;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
